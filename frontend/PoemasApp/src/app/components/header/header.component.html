@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md bg-light shadow-nav">
+  <div class="container-fluid mb-3 nav-min">
+    <a class="navbar-brand navbar_pad" href="/"><img class="logo" src="/assets/img/3627782.png"> Mi Poema</a>
+    <button class="navbar-toggler boton-header" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-lg-0 navbar-home">
+        <li *ngIf="!isToken" class="nav-item ">
+          <a class="nav-link active navbar_pad" aria-current="page" routerLink="/login">Login</a>
+        </li>
+        <li *ngIf="isToken" class="nav-item ">
+          <a class="nav-link active navbar_pad btn-cerrar" aria-current="page" (click)="cerrarSesion()" routerLink="/">Cerrar sesion</a>
+        </li>
+        <li *ngIf="isAdmin && isToken"  class="nav-item ">
+          <a class="nav-link active navbar_pad usuarios_estilo" aria-current="page" routerLink="/admin"><button type="button" class="btn btn-outline-secondary btn-sm">Usuarios</button></a>
+        </li>
+        <li *ngIf="isToken && aprobado"  class="nav-item ">
+          <a class="nav-link active navbar_pad usuarios_estilo" aria-current="page" routerLink="/crear-poema"><button type="button" class="btn btn-outline-secondary btn-sm">Crear Poema</button></a>
+        </li>
+      </ul>
+      <form class="d-flex navbar_pad" role="search" >
+        <input class="form-control me-2 search-input" type="search" placeholder="Buscar" aria-label="Search" #termino>
+        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+</nav>

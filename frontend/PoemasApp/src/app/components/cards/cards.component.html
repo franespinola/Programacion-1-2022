@@ -1,0 +1,68 @@
+<form (ngSubmit)="buscarPoemas()" #form="ngForm" class="search-form">
+  <div class="form-row">
+    <div class="col-md-5 mb-3">
+      <input type="text" class="form-control" name="titulo" [(ngModel)]="titulo" placeholder="Buscar por título">
+    </div>
+    <div class="col-md-4 mb-3">
+      <select class="form-control" name="order_by" [(ngModel)]="orderBy">
+        <option value="">Ordenar por...</option>
+        <option value="titulo[asc]">Título (A-Z)</option>
+        <option value="titulo[desc]">Título (Z-A)</option>
+        <option value="calificaciones[asc]">Calificaciones (menor a mayor)</option>
+        <option value="calificaciones[desc]">Calificaciones (mayor a menor)</option>
+        <option value="fecha[asc]">Fecha (ascendente)</option>
+        <option value="fecha[desc]">Fecha (descendente)</option>
+      </select>
+    </div>
+    <div class="col-md-3 mb-3">
+      <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+    </div>
+  </div>
+</form>
+
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="col"*ngFor="let poe of arrayPoemas">
+    <div class="card card-home">
+      <div class="card-header">{{poe.titulo}}<i class="fa-solid fa-star"
+          style="cursor: pointer; float: right; color:orange; text-shadow: black 0px 0px;">
+          <font class="puntaje">{{poe.calificacion[0]?.valoracion}}</font>
+        </i>
+      </div>
+      <div class="card-body">
+        <!--<h5 class="card-title">{{poe.contenido}}</h5>-->
+        <p class="card-text p-4">{{poe.contenido.substr(0,80)}}</p>
+        <a *ngIf="token && aprobado" routerLink="/poema/{{poe.id}}" class="btn btn_poema p-1">Ver poema</a>
+        <hr>
+        <small class="text-muted">
+          Posteado por <cite title="Source Title">{{poe.usuario.nombre}}</cite>
+        </small>
+        <small class="text-muted">
+          el dia&nbsp;<cite title="Source Title">{{poe.fecha.substr(0,10)}}</cite>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center main mt-5">
+  <nav aria-label="Page navigation example" style="position: relative;bottom: 50px;">
+    <ul class="pagination justify-content-center mt-4">
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li *ngFor="let page of [].constructor(paginado.pages); let i=index"
+       class="page-item"
+       [ngClass]="{active:(i+1) === paginado.page}"
+        ><a class="page-link" (click)="changePagina(i+1)">{{i+1}}</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

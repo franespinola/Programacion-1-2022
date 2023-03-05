@@ -1,0 +1,109 @@
+<div class="container tabla-admin">
+    <div class="navbar navbar-expand-sm navbar-dark navbar-position navbar-size p-4">
+        <a href="#" class="link-primary text-decoration-none d-flex letra-tamano" data-bs-toggle="modal"
+            data-bs-target="#modalNuevoPoeta"><span class="material-symbols-rounded agregar-tamano" disabled>note_add</span></a>
+        <form class="form-inline form-content" (ngSubmit)="buscarUsuarios()"  #form="ngForm" >
+            <input class="form-control mr-sm-2 input-size" type="text" name="nombre" [(ngModel)]="nombre" placeholder="Buscar por nombre">
+            <select class="form-control separacion-campos" name="order_by" [(ngModel)]="orderBy">
+                <option value="">Ordenar por...</option>
+                <option value="nombre[asc]">Nombre (A-Z)</option>
+                <option value="nombre[desc]">Nombre (Z-A)</option>
+                <option value="poemas_cant[asc]">Menor cantidad de poemas</option>
+                <option value="poemas_cant[desc]">Mayor cantidad de poemas</option>
+                <option value="calificaciones_cant[asc]">Menor cantidad de calificaciones</option>
+                <option value="calificaciones_cant[desc]">Mayor cantidad de calificaciones</option>
+            </select>
+            <div class="col-md-3 mb-3">
+                <button type="submit" class="btn btn-navegador btn-primary btn-block">Buscar</button>
+            </div>
+        </form>
+    </div>
+    <table class="table align-middle table-md tabla-admin-align table-striped table-bordered">
+        <thead class="table col-color">
+            <th scope="col" class="col-chica">ID</th>
+            <th scope="col" class="col-normal">Nombre</th>
+            <th scope="col" class="col-normal">Email</th>
+            <th scope="col" class="col-chica">Cantidad Poemas</th>
+            <th scope="col" class="col-chica">Cantidad Calificaciones</th>
+            <th scope="col" class="col-chica">Aprobado</th>
+            <th scope="col" class="col-iconos"></th>
+        </thead>
+        <!--ng for para recorrer los arreglos de usuario-->
+        <tbody class="table-group-divider" *ngFor="let usu of arrayUsuarios">
+            <tr>
+                <!--atributos del arrayUsuarios-->
+                <th scope="row">{{usu.id}}</th>
+                <td>{{usu.nombre}}</td>
+                <td>{{usu.email}}</td>
+                <td>{{usu.poemas_cant}}</td>
+                <td>{{usu.calificaciones_cant}}</td>
+                <td>
+                    <button class="my-button" id="aprobado-btn-{{usu.id}}" (click)="updateEstadoAprobado(usu.id)">{{usu.aprobado}}</button>
+
+                </td>
+                <!--en el boton de edit, redirige a un usuario en particular-->
+                <td><a><span class="material-symbols-outlined cursor" routerLink="/user/{{usu.id}}">edit</span></a><a href="#" class="separacion"><span class="material-symbols-outlined cursor" (click)="deleteUsuario(usu.id)">delete</span></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center main mt-5">
+        <nav aria-label="Page navigation example" style="position: relative;bottom: 50px;">
+          <ul class="pagination justify-content-center mt-4">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li *ngFor="let page of [].constructor(paginado.pages); let i=index"
+             class="page-item"
+             [ngClass]="{active:(i+1) === paginado.page}"
+              ><a class="page-link" (click)="changePagina(i+1)">{{i+1}}</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    
+</div>
+
+<!---modal-->
+<div class="modal fade" id="modalNuevoPoeta" tabindex="-1" role="dialog" aria-labelledby="modalNuevoPoetaLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevoPoetaLabel">Agregar Nuevo Poeta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- formulario para dar de alta al poeta -->
+                <form #miFormulario="ngForm" (ngSubmit)="crearUsuario(miFormulario)">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="nombre" placeholder="Nombre del poeta" required (ngModelChange)="onChangeNombre()">
+                        <div *ngIf="nombreError" class="alert alert-danger">{{nombreErrorMsg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="email" placeholder="Email del poeta" required (ngModelChange)="onChangeEmail()">
+                        <div *ngIf="emailError" class="alert alert-danger">{{emailErrorMsg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contrasena">Contraseña</label>
+                        <input type="password" class="form-control" id="contrasena" name="contrasena" [(ngModel)]="contrasena" placeholder="Contraseña temporal del poeta" required (ngModelChange)="onChangeContrasena()">
+                        <div *ngIf="contrasenaError" class="alert alert-danger">{{contrasenaErrorMsg}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm(miFormulario)">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
